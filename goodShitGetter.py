@@ -50,21 +50,21 @@ def getSub(subm, path = ''):
 
     for sub in top_subreddit:
         topics_dict["title"].append(sub.title)
-        topics_dict["score"].append(sub.score)
+#        topics_dict["score"].append(sub.score)
         topics_dict["id"].append(sub.id)
         topics_dict["url"].append(sub.url)
-        topics_dict["comms_num"].append(sub.num_comments)
-        topics_dict["created"].append(sub.created)
-        topics_dict["body"].append(sub.selftext)
-    res = requests.get(topics_dict["url"][0], stream = True)
-    if path != '':
-        path +='\\'
-    local_file = open(path+'local_image.jpg', 'wb')
-    res.raw.decode_content = True
-    shutil.copyfileobj(res.raw, local_file)
+#        topics_dict["comms_num"].append(sub.num_comments)
+#        topics_dict["created"].append(sub.created)
+#        topics_dict["body"].append(sub.selftext)
+        res = requests.get(sub.url, stream = True)
+        if path != '':
+            path +='\\'
+        local_file = open(path+str(sub.id)+'.jpg', 'wb')
+        res.raw.decode_content = True
+        shutil.copyfileobj(res.raw, local_file)
 #    topics_data = pd.DataFrame(topics_dict)
 #    topics_data.to_excel(name+'.xlsx', sheet_name='SE', index=False)
-red(sub = 'pics', path = 'E:\\157239n')
+
 
 
 
