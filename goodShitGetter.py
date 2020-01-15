@@ -5,9 +5,17 @@ import xlrd
 import cv2
 import requests
 import shutil
+from tkinter import *
 
 
-
+#download Image part:
+def downloadImage(url, name):
+    res = requests.get(url, stream = True)
+    local_file = open(name+'.jpg', 'wb')
+    res.raw.decode_content = True
+    shutil.copyfileobj(res.raw, local_file)
+    
+#info gather part:
 def red(sub, path = ''):
     reddit = praw.Reddit(client_id='3ccBL-zL5f9haw', \
                          client_secret=None, \
@@ -47,12 +55,13 @@ def getSub(subm, path = ''):
                     "comms_num": [], 
                     "created": [], 
                     "body":[]}
-
+    
     for sub in top_subreddit:
         topics_dict["title"].append(sub.title)
 #        topics_dict["score"].append(sub.score)
         topics_dict["id"].append(sub.id)
         topics_dict["url"].append(sub.url)
+        downloadImage(sub.url, sub.id)
 #        topics_dict["comms_num"].append(sub.num_comments)
 #        topics_dict["created"].append(sub.created)
 #        topics_dict["body"].append(sub.selftext)
@@ -65,6 +74,28 @@ def getSub(subm, path = ''):
 #    topics_data = pd.DataFrame(topics_dict)
 #    topics_data.to_excel(name+'.xlsx', sheet_name='SE', index=False)
 
+
+#UI part:
+root = Tk()
+label_0 = Label(root, text="Sub-Reddit Image Downloader")
+label_1 = Label(root, text="Subreddit name:")
+
+def printName():
+    try:
+        red(entry_1.get())
+    except:
+        print('Error: No such subreddit')
+
+entry_1 = Entry(root)
+entry_2 = Entry(root)
+
+label_1.grid(row=1, sticky=E)
+entry_1.grid(row=1, column=1)
+
+button = Button(root, text="click", fg="red", command = printName)
+button.grid(row=2, column=0)
+print('nrub')
+root.mainloop()
 
 
 
